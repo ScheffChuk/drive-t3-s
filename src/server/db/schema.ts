@@ -1,3 +1,5 @@
+"server-only";
+
 import {
   int,
   text,
