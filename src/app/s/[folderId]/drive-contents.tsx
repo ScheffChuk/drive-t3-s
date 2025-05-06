@@ -1,6 +1,7 @@
 "use client";
 
 import { Upload, ChevronRight } from "lucide-react";
+import "@uploadthing/react/styles.css";
 
 import type { files_table, folders_table } from "~/server/db/schema";
 import Link from "next/link";
@@ -17,20 +18,19 @@ export default function DriveContents(props: {
 }) {
   const navigate = useRouter();
 
-
   return (
     <div className="min-h-screen bg-gray-900 p-8 text-gray-100">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-6xl space-y-4">
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center">
-            <Link href="/f/1" className="mr-2 text-gray-300 hover:text-white">
+            <Link href="/" className="mr-2 text-gray-300 hover:text-white">
               My Drive
             </Link>
             {props.parents.map((folder, index) => (
               <div key={folder.id} className="flex items-center">
                 <ChevronRight className="mx-2 text-gray-500" size={16} />
                 <Link
-                  href={`/f/${folder.id}`}
+                  href={`/s/${folder.id}`}
                   className="text-gray-300 hover:text-white"
                 >
                   {folder.name}
@@ -68,7 +68,6 @@ export default function DriveContents(props: {
         <UploadButton
           endpoint="driveUploader"
           onBeforeUploadBegin={(files) => {
-
             return files;
           }}
           onClientUploadComplete={() => {

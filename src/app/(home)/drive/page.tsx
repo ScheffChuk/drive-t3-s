@@ -33,5 +33,5 @@ export default async function DrivePage() {
     );
   }
 
-  return redirect(`/f/${rootFolder.id}`);
+  return redirect(`/s/${rootFolder.id}`);
 }
