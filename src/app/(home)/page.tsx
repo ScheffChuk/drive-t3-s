@@ -9,7 +9,7 @@ export default function HomePage() {
         Drive TS
       </h1>
       <p className="mx-auto mb-8 max-w-md text-xl text-neutral-400 md:text-2xl">
-        Secure, fast, and easy file storage for the modern web
+        Unsafe, slow, and hard to use file storage for the modern web
       </p>
       <form
         action={async () => {
@@ -26,13 +26,13 @@ export default function HomePage() {
         <Button
           size="lg"
           type="submit"
-          className="border border-neutral-700 bg-neutral-800 text-white transition-colors hover:bg-neutral-700"
+          className="cursor-pointer border border-neutral-700 bg-neutral-800 text-white transition-colors hover:bg-neutral-700"
         >
           Get Started
         </Button>
       </form>
       <footer className="mt-16 text-sm text-neutral-500">
-        © {new Date().getFullYear()} T3 Drive. All rights reserved.
+        © {new Date().getFullYear()} Drive TS. All rights reserved.
       </footer>
     </>
   );

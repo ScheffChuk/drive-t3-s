@@ -9,6 +9,8 @@ import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { UploadButton } from "~/components/uploadthing";
 import { useRouter } from "next/navigation";
 import { FileRow, FolderRow } from "./file-row";
+import { Button } from "~/components/ui/button";
+import { createFolder } from "~/server/actions";
 
 export default function DriveContents(props: {
   files: (typeof files_table.$inferSelect)[];
@@ -17,6 +19,12 @@ export default function DriveContents(props: {
   currentFolderId: number;
 }) {
   const navigate = useRouter();
+  const handleCreateFolder = async () => {
+    const folderName = prompt("Enter folder name:");
+    if (!folderName) return;
+    await createFolder(folderName, props.currentFolderId);
+    navigate.refresh();
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 p-8 text-gray-100">
@@ -38,7 +46,16 @@ export default function DriveContents(props: {
               </div>
             ))}
           </div>
-          <div>
+          <div className="flex flex-row items-center space-x-4">
+            <Button
+              variant="outline"
+              size="sm"
+              className="cursor-pointer"
+              onClick={() => handleCreateFolder()}
+            >
+              <Upload className="text-gray-500" size={24} />
+              <span className="text-gray-900">Create Folder</span>
+            </Button>
             <SignedOut>
               <SignInButton />
             </SignedOut>
@@ -51,7 +68,7 @@ export default function DriveContents(props: {
           <div className="border-b border-gray-700 px-6 py-4">
             <div className="grid grid-cols-12 gap-4 text-sm font-medium text-gray-400">
               <div className="col-span-6">Name</div>
-              <div className="col-span-2">Type</div>
+              <div className="col-span-2">Created at</div>
               <div className="col-span-3">Size</div>
               <div className="col-span-1"></div>
             </div>
