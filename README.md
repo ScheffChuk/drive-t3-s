@@ -13,9 +13,10 @@
 - [x] Check if user is owner before showing the folder page.
 
 ### Make a "file view" page
-You get the idea. Maybe check out my last tutorial?
+- [ ] You get the idea. Maybe check out my last tutorial?
 
 ### Toasts!
 
 
 ### Gray out a row while it's being deleted
+- [x] Disabled click when a row is being deleted

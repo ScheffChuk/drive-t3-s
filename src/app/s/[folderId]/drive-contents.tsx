@@ -1,6 +1,6 @@
 "use client";
 
-import { Upload, ChevronRight } from "lucide-react";
+import { ChevronRight, FolderUp } from "lucide-react";
 import "@uploadthing/react/styles.css";
 
 import type { files_table, folders_table } from "~/server/db/schema";
@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { FileRow, FolderRow } from "./file-row";
 import { Button } from "~/components/ui/button";
 import { createFolder } from "~/server/actions";
+import { useState } from "react";
 
 export default function DriveContents(props: {
   files: (typeof files_table.$inferSelect)[];
@@ -19,6 +20,8 @@ export default function DriveContents(props: {
   currentFolderId: number;
 }) {
   const navigate = useRouter();
+  const [deletingItems, setDeletingItems] = useState<Set<number>>(new Set());
+
   const handleCreateFolder = async () => {
     const folderName = prompt("Enter folder name:");
     if (!folderName) return;
@@ -31,9 +34,10 @@ export default function DriveContents(props: {
       <div className="mx-auto max-w-6xl space-y-4">
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center">
-            <Link href="/" className="mr-2 text-gray-300 hover:text-white">
-              My Drive
-            </Link>
+            <Link
+              href="/"
+              className="mr-2 text-gray-300 hover:text-white"
+            ></Link>
             {props.parents.map((folder, index) => (
               <div key={folder.id} className="flex items-center">
                 <ChevronRight className="mx-2 text-gray-500" size={16} />
@@ -53,7 +57,7 @@ export default function DriveContents(props: {
               className="cursor-pointer"
               onClick={() => handleCreateFolder()}
             >
-              <Upload className="text-gray-500" size={24} />
+              <FolderUp className="text-gray-500" size={24} />
               <span className="text-gray-900">Create Folder</span>
             </Button>
             <SignedOut>
@@ -75,10 +79,38 @@ export default function DriveContents(props: {
           </div>
           <ul>
             {props.folders.map((folder) => (
-              <FolderRow key={folder.id} folder={folder} />
+              <FolderRow
+                key={folder.id}
+                folder={folder}
+                isDeleting={deletingItems.has(folder.id)}
+                onDeleteStart={() => {
+                  setDeletingItems((prev) => new Set([...prev, folder.id]));
+                }}
+                onDeleteEnd={() => {
+                  setDeletingItems((prev) => {
+                    const next = new Set(prev);
+                    next.delete(folder.id);
+                    return next;
+                  });
+                }}
+              />
             ))}
             {props.files.map((file) => (
-              <FileRow key={file.id} file={file} />
+              <FileRow
+                key={file.id}
+                file={file}
+                isDeleting={deletingItems.has(file.id)}
+                onDeleteStart={() => {
+                  setDeletingItems((prev) => new Set([...prev, file.id]));
+                }}
+                onDeleteEnd={() => {
+                  setDeletingItems((prev) => {
+                    const next = new Set(prev);
+                    next.delete(file.id);
+                    return next;
+                  });
+                }}
+              />
             ))}
           </ul>
         </div>
